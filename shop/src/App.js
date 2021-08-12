@@ -16,6 +16,7 @@ function App() {
   'https://codingapple1.github.io/shop/shoes3.jpg']);
   let [btnCount,setBtnCount] = useState(2);
   let [재고,재고변경]= useState([10,11,12]);
+  let variable = 1;
   return (
     <div className="App">
       <Navbar bg="light" expand="lg">
@@ -57,7 +58,6 @@ function App() {
       
     }
   </div>
-  
   <button className="btn btn-primary mt-3" onClick={()=>{
     //성공하면 then, 실패하면 catch
     let tmp = btnCount;
