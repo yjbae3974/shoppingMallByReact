@@ -1,12 +1,15 @@
 import logo from './logo.svg';
 import { Navbar,Container,Nav,NavDropdown } from 'react-bootstrap';
 import './App.css';
-import React,{useState} from 'react';
+import React,{useState, useContext} from 'react';
 import Detail from './Detail'
 import Product from './data.js'
 import {Link, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import Cart from './Cart';
+
+export let  재고context = React.createContext();
 
 function App() {
   let [shoes,shoes변경]=useState(Product);//중괄호 안써도 되네
@@ -47,6 +50,9 @@ function App() {
   </div>
 </div>
 <div className="container">
+
+  <재고context.Provider value={재고}>
+    {/* //값 공유를 원하는 html들을 감싸고 value={공유원하는 값} */}
   <div className="row">
     {
       shoes.map((신발,index)=>{
@@ -58,6 +64,8 @@ function App() {
       
     }
   </div>
+  </재고context.Provider>
+  
   <button className="btn btn-primary mt-3" onClick={()=>{
     //성공하면 then, 실패하면 catch
     let tmp = btnCount;
@@ -79,7 +87,12 @@ function App() {
 </div>
 </Route>
 <Route path="/detail/:id">
- <Detail shoes={shoes} 재고={재고} 재고변경={재고변경}></Detail>
+  <재고context.Provider value={재고}>
+    <Detail shoes={shoes} 재고={재고} 재고변경={재고변경}></Detail>
+  </재고context.Provider>
+</Route>
+<Route path="/cart">
+  <Cart></Cart>
 </Route>
 <Route path="/:id">           {/*모든 문자라는 경로를 의미*/}
   <div>아무거나 적었을 때 이거 보여주셈</div>
@@ -92,12 +105,24 @@ function App() {
   );
 }
 function 상품(props){
+
+  let 재고 = useContext(재고context);
+
   return (
     <div className="col-md-4">
       <img src={'https://codingapple1.github.io/shop/shoes'+(props.index+1)+'.jpg'} width="100%" alt="" />
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.content} & {props.shoes.price}</p>
+      {재고[props.index]}
+      <Test></Test>
     </div>
+  )
+}
+
+function Test(){
+  let 재고 = useContext(재고context)
+  return (
+    <p> stock: {재고}</p>
   )
 }
 

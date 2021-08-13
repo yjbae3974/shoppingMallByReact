@@ -23,6 +23,13 @@ $메인칼라 : #ff0000;
 .disabled{
     display: none;
 }
+.wow-enter{//시작
+    opacity: 0;
+}
+.wow-enter-active{//동작때
+    opacity: 1;
+    transition: all 500ms;
+}
 
 // div.container{
 
