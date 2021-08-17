@@ -48,6 +48,7 @@ let 초기값 = [
 
 function reducer(state = 초기값,액션){//여기서 수정방법을 정의
   let 카피본 = [...state];
+
   switch(액션.type){
     case '수량증가':
       카피본[0].quan++;
@@ -56,6 +57,9 @@ function reducer(state = 초기값,액션){//여기서 수정방법을 정의
       if(카피본[0].quan>0){
         카피본[0].quan--;
       }
+      return 카피본;
+    case '항목추가':
+      카피본.push(액션.payload);
       return 카피본;
     default:
       return state;
