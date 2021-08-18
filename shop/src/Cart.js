@@ -1,10 +1,14 @@
 import React from 'react';
 import {Table} from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
 //Redux 쓰는 이유: props쓰기 싫어서. props없이 모든 컴포넌트가 state를 갖다 쓰기 가능.
 
 function Cart(props){
+    let state1 = useSelector((state)=>state.reducer);
+    let state2 = useSelector((state)=>state.reducer2);
+    let dispatch = useDispatch();
+
     return(
         <div>
             <div className="container" style={{marginTop:100}}>
@@ -20,15 +24,16 @@ function Cart(props){
                 </thead>
                 <tbody>
                     {
-                        props.state.map((states,i)=>{
+                        state1.map((states,i)=>{
+                            let id = state1[i].id
                             return(
                                 <tr>
-                                    <td>{i+1}</td>
-                                    <td>{props.state[i].name}</td>
-                                    <td>{props.state[i].quan}</td>
-                                    <td>{props.state[i].price}</td>
-                                    <td><button onClick={()=>{props.dispatch({type: '수량증가'})}}>+</button><button onClick={()=>{props.dispatch({type: '수량감소'})}}>-</button></td>
-                                    <td><button onClick={()=>{props.dispatch({type: '항목추가', payload: {id: 1, name:'brian',quan:1,price: 300000}})}}>항목추가</button></td>
+                                    <td>{states.id+1}</td>
+                                    <td>{state1[i].name}</td>
+                                    <td>{states.quan}</td>
+                                    <td>{state1[i].price}</td>
+                                    <td><button onClick={()=>{dispatch({type: '수량증가',데이터: states.id})}}>+</button><button onClick={()=>{dispatch({type: '수량감소'})}}>-</button></td>
+                                    <td><button onClick={()=>{dispatch({type: '항목추가',데이터: states.id, payload: {id: 1, name:'brian',quan:1,price: 300000}})}}>항목추가</button></td>
                                 </tr>
                             )
                         })
@@ -36,11 +41,11 @@ function Cart(props){
                 </tbody>
             </Table>
             {
-                props.alert열렸니 === true
+                state2 === true
                 ?(
                     <div className="my-alert2">
                         <p>지금 구매하시면 신규할인 20%</p>
-                        <button onClick={()=>{props.dispatch({type: 'false'})}}>닫기</button>
+                        <button onClick={()=>{dispatch({type: 'false'})}}>닫기</button>
                     </div>
                 )
                 :null
@@ -52,13 +57,13 @@ function Cart(props){
     )
 }
 
-function state를props화(state){
-    console.log(state);
-    return{
-        state: state.reducer,
-        alert열렸니 : state.reducer2
-    }
-}
-export default connect(state를props화)(Cart)
+// function state를props화(state){
+//     console.log(state);
+//     return{
+//         state: state.reducer,
+//         alert열렸니 : state.reducer2
+//     }
+// }
+// export default connect(state를props화)(Cart)
 
-//export default Cart;
+export default Cart;

@@ -51,11 +51,11 @@ function reducer(state = 초기값,액션){//여기서 수정방법을 정의
 
   switch(액션.type){
     case '수량증가':
-      카피본[0].quan++;
+      카피본[액션.데이터].quan++;
       return 카피본;
     case '수량감소':
-      if(카피본[0].quan>0){
-        카피본[0].quan--;
+      if(카피본[액션.데이터].quan>0){
+        카피본[액션.데이터].quan--;
       }
       return 카피본;
     case '항목추가':

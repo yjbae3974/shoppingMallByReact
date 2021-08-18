@@ -4,7 +4,7 @@ import './App.css';
 import React,{useState, useContext} from 'react';
 import Detail from './Detail'
 import Product from './data.js'
-import {Link, Route, Switch} from 'react-router-dom';
+import {Link, Route, Switch, useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import Cart from './Cart';
@@ -18,25 +18,20 @@ function App() {
   'https://codingapple1.github.io/shop/shoes2.jpg',
   'https://codingapple1.github.io/shop/shoes3.jpg']);
   let [btnCount,setBtnCount] = useState(2);
-  let [재고,재고변경]= useState([10,11,12]);
+  let [재고,재고변경]= useState([10,11,12,10,10,10]);
   let variable = 1;
   return (
-    <div className="App">
+    <div className="App" style={{minHeight: '120vh', paddingBottom: 30}}>
       <Navbar bg="light" expand="lg">
   <Container>
-    <Navbar.Brand href="#home">BYJ's shoppingMall</Navbar.Brand>
+    <Navbar.Brand as={Link} to="/">BYJ's shoppingMall</Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="me-auto">
         <Nav.Link as ={Link} to="/">Home</Nav.Link>
         <Nav.Link as = {Link} to ="/detail/0">Detail</Nav.Link>
-        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-        </NavDropdown>
+        <Nav.Link as = {Link} to ="/cart">Cart</Nav.Link>
+        
       </Nav>
     </Navbar.Collapse>
   </Container>
@@ -106,23 +101,22 @@ function App() {
 }
 function 상품(props){
 
-  let 재고 = useContext(재고context);
+  let history = useHistory();
 
   return (
-    <div className="col-md-4">
+    <div className="col-md-4" onClick={()=>{history.push('/detail/'+props.shoes.id)}}>
       <img src={'https://codingapple1.github.io/shop/shoes'+(props.index+1)+'.jpg'} width="100%" alt="" />
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.content} & {props.shoes.price}</p>
-      {재고[props.index]}
-      <Test></Test>
+      <Test index={props.index}></Test>
     </div>
   )
 }
 
-function Test(){
+function Test(props){
   let 재고 = useContext(재고context)
   return (
-    <p> stock: {재고}</p>
+    <p> stock: {재고[props.index]}</p>
   )
 }
 
