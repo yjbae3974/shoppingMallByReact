@@ -26,24 +26,7 @@ function reducer2(state = alert초기값, action){
 //redux에서 state 만드는 법: 변수로 초기값 만들고 reducer안에 넣기. 그리고 state 수정하는 법도 작성.
 let 초기값 = [
   
-      { 
-        id: 0,
-        name: 'Intel-i7',
-        quan: 2,
-        price: 500000
-      },
-      { 
-        id: 1,
-        name: 'Intel-i5',
-        quan: 3,
-        price: 400000
-      },
-      { 
-        id: 2,
-        name: 'Intel i-3',
-        quan: 4,
-        price: 300000
-      }
+    
 ]
 
 function reducer(state = 초기값,액션){//여기서 수정방법을 정의
@@ -51,15 +34,23 @@ function reducer(state = 초기값,액션){//여기서 수정방법을 정의
 
   switch(액션.type){
     case '수량증가':
-      카피본[액션.데이터].quan++;
+      카피본.find((e)=>{if(e.id===액션.데이터){return true;}}).quan++;
+      // 카피본[액션.데이터].quan++;
       return 카피본;
     case '수량감소':
-      if(카피본[액션.데이터].quan>0){
-        카피본[액션.데이터].quan--;
+      if(카피본.find((e)=>{if(e.id===액션.데이터){return true;}}).quan>0){
+        카피본.find((e)=>{if(e.id===액션.데이터){return true;}}).quan--;
       }
       return 카피본;
     case '항목추가':
-      카피본.push(액션.payload);
+      let newid = 액션.payload.id;
+      console.log(newid);
+      if(카피본.find((e)=>{if(e.id===newid){return true}})===undefined){
+        카피본.push(액션.payload);
+      }
+      else{ 
+        카피본.find((e)=>{if(e.id===newid){return true;}}).quan++;
+      }
       return 카피본;
     default:
       return state;

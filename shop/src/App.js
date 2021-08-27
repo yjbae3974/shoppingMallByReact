@@ -1,13 +1,14 @@
 import logo from './logo.svg';
 import { Navbar,Container,Nav,NavDropdown } from 'react-bootstrap';
 import './App.css';
-import React,{useState, useContext} from 'react';
-import Detail from './Detail'
+import React,{useState, useContext, lazy, Suspense} from 'react';
+// import Detail from './Detail'
 import Product from './data.js'
 import {Link, Route, Switch, useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import Cart from './Cart';
+let Detail = lazy(()=>import('./Detail'));
 
 export let  재고context = React.createContext();
 
@@ -83,7 +84,9 @@ function App() {
 </Route>
 <Route path="/detail/:id">
   <재고context.Provider value={재고}>
-    <Detail shoes={shoes} 재고={재고} 재고변경={재고변경}></Detail>
+    <Suspense fallback={<div>로딩중</div>}>
+      <Detail shoes={shoes} 재고={재고} 재고변경={재고변경}></Detail>
+    </Suspense>
   </재고context.Provider>
 </Route>
 <Route path="/cart">

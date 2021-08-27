@@ -6,6 +6,7 @@ import './detail.scss';
 import {재고context} from './App';
 import {Nav} from 'react-bootstrap';
 import {CSSTransition} from 'react-transition-group';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
 let 박스 = styled.div`
   padding:30px;
@@ -16,6 +17,7 @@ let 제목 = styled.h4`
 `
 
 function Detail(props){
+  let dispatch = useDispatch();
   let [disabled,setDisabled]= useState(0);
   let [input값,setInput값] = useState('');
   let [누른탭,누른탭변경] = useState(0);
@@ -44,6 +46,7 @@ function Detail(props){
     let 찾은상품 = props.shoes.find(function(상품){
       return 상품.id == id;
     })
+    let jpgNum = 찾은상품.id+1
     console.log(찾은상품);
     return(
       <div className="container">
@@ -64,7 +67,7 @@ function Detail(props){
        }
         <div className="row">
           <div className="col-md-6">
-            <img src={"https://codingapple1.github.io/shop/shoes1.jpg"} width="100%" />
+            <img src={"https://codingapple1.github.io/shop/shoes" + jpgNum +".jpg"} width="100%" />
           </div>
           <div className="col-md-6 mt-4">
             <h4 className="pt-5 pb-2" style={{fontSize:25}}>{찾은상품.title}</h4>
@@ -76,6 +79,8 @@ function Detail(props){
               let stock = props.재고;
               stock[0]--;
               props.재고변경([...stock]);
+              console.log(찾은상품)
+              dispatch({type: '항목추가', 데이터: 찾은상품.id, payload: {id: 찾은상품.id,name: 찾은상품.title,price: 찾은상품.price,quan: props.재고[0]}})
             }}>주문하기</button> 
             <button className="btn btn-danger" onClick={()=>{history.goBack();}}>뒤로가기</button> {/*history.push('/')이러면 push내부 경로로 감.*/}
           </div>
@@ -107,13 +112,39 @@ function TabContent(props){
   useEffect(()=>{
     props.스위치변경(true);
   })
-    if(props.누른탭 === 0){
-      return <div className="mt-5">0번째 내용입니다.</div>
-    } else if(props.누른탭 === 1){
-      return <div className="mt-5">1번째 내용입니다.</div>
-    } else if(props.누른탭 === 2){
-      return <div className="mt-5">2번째 내용입니다.</div>
-    }
+  return (
+    <div>
+      {
+        { //새로운 if else문 쓰는법!
+        0:<div className="mt-5">0번째 내용입니다.<br/>
+        알아두어야할 점: useState는 비동기적으로 실행되기에 실행순서가 뒤엉킬 수 있음.<br/>
+         밑에 있는 코드가 더 적게 시간 소요하면 밑에 있는 코드 먼저 실행.</div>,
+        1: <div className="mt-5">useState의 async알아보기:<br/><Asynchrounous></Asynchrounous></div>,
+        2:<div className="mt-5">2번째 내용입니다.</div>,
+        }[props.누른탭]
+      }
+    
+     
+    </div>
+  )
+    
       
+  }
+  function Asynchrounous(){
+    let [count, setCount] = useState(0);
+    let [age, setAge] = useState(20);
+    useEffect(()=>{ //이걸 쓰면 count가 변경되면 이것도 실행해주세요~ 라는 뜻이 됨.
+      if ( count!=0 && count < 3 ) {
+        setAge(age+1);
+      }
+    },[count])
+    return (
+      <div>
+        <div>안녕하십니까 전 {age}</div>
+        <button onClick={()=>{
+          setCount(count+1);
+          }}>누르면 한 살 먹기</button>
+      </div>
+    )
   }
   export default Detail;
